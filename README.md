@@ -56,6 +56,11 @@ See [the english unit tests](https://github.com/adamwdraper/Numeral-js/blob/mast
 
 # Changelog
 
+### 2.0.7
+
+Bug fix: 对1e-6此类的小数格式化异常。
+
+
 ### 2.0.6
 
 Bug fix: Multi letter currency symbols and spacing
