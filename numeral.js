@@ -1,6 +1,6 @@
 /*! @preserve
  * numeral.js
- * version : 2.0.6
+ * version : 2.0.7
  * author : Adam Draper
  * license : MIT
  * http://adamwdraper.github.com/Numeral-js/
@@ -21,7 +21,7 @@
 
     var numeral,
         _,
-        VERSION = '2.0.6',
+        VERSION = '2.0.7',
         formats = {},
         locales = {},
         defaults = {
@@ -178,7 +178,6 @@
             }
 
             // break number and format
-            int = value.toString().split('.')[0];
             precision = format.split('.')[1];
             thousands = format.indexOf(',');
             leadingCount = (format.split('.')[0].split(',')[0].match(/0/g) || []).length;
@@ -394,8 +393,11 @@
 
             power = Math.pow(10, boundedPrecision);
 
+            var valueE = value.toString().split('e-')[1] || 0;
+            var valueString = valueE ? value.toFixed(valueE) : value.toString();
+
             // Multiply up by precision, round accurately, then divide and use native toFixed():
-            output = (roundingFunction(value + 'e+' + boundedPrecision) / power).toFixed(boundedPrecision);
+            output = (roundingFunction(valueString + 'e+' + boundedPrecision) / power).toFixed(boundedPrecision);
 
             if (optionals > maxDecimals - boundedPrecision) {
                 optionalsRegExp = new RegExp('\\.?0{1,' + (optionals - (maxDecimals - boundedPrecision)) + '}$');
@@ -692,7 +694,8 @@
     
 
 (function() {
-        numeral.register('format', 'bps', {
+    
+    numeral.register('format', 'bps', {
             regexps: {
                 format: /(BPS)/,
                 unformat: /(BPS)/
@@ -723,12 +726,13 @@
             unformat: function(string) {
                 return +(numeral._.stringToNumber(string) * 0.0001).toFixed(15);
             }
-        });
+        });
 })();
 
 
 (function() {
-        var decimal = {
+    
+    var decimal = {
             base: 1000,
             suffixes: ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
         },
@@ -804,12 +808,13 @@
 
             return value;
         }
-    });
+    });
 })();
 
 
 (function() {
-        numeral.register('format', 'currency', {
+    
+    numeral.register('format', 'currency', {
         regexps: {
             format: /(\$)/
         },
@@ -868,12 +873,13 @@
 
             return output;
         }
-    });
+    });
 })();
 
 
 (function() {
-        numeral.register('format', 'exponential', {
+    
+    numeral.register('format', 'exponential', {
         regexps: {
             format: /(e\+|e-)/,
             unformat: /(e\+|e-)/
@@ -904,12 +910,13 @@
 
             return numeral._.reduce([value, Math.pow(10, power)], cback, 1);
         }
-    });
+    });
 })();
 
 
 (function() {
-        numeral.register('format', 'ordinal', {
+    
+    numeral.register('format', 'ordinal', {
         regexps: {
             format: /(o)/
         },
@@ -927,12 +934,13 @@
 
             return output + ordinal;
         }
-    });
+    });
 })();
 
 
 (function() {
-        numeral.register('format', 'percentage', {
+    
+    numeral.register('format', 'percentage', {
         regexps: {
             format: /(%)/,
             unformat: /(%)/
@@ -969,12 +977,13 @@
             }
             return number;
         }
-    });
+    });
 })();
 
 
 (function() {
-        numeral.register('format', 'time', {
+    
+    numeral.register('format', 'time', {
         regexps: {
             format: /(:)/,
             unformat: /(:)/
@@ -1006,7 +1015,7 @@
             }
             return Number(seconds);
         }
-    });
+    });
 })();
 
 return numeral;
