@@ -1,6 +1,6 @@
 /*! @preserve
  * numeral.js
- * version : 2.0.7
+ * version : 2.0.8
  * author : Adam Draper
  * license : MIT
  * http://adamwdraper.github.com/Numeral-js/
@@ -21,7 +21,7 @@
 
     var numeral,
         _,
-        VERSION = '2.0.7',
+        VERSION = '2.0.8',
         formats = {},
         locales = {},
         defaults = {
@@ -60,12 +60,15 @@
         if (numeral.isNumeral(input)) {
             value = input.value();
         } else if (input === 0 || typeof input === 'undefined') {
-            value = 0;
+            // Maybe -0
+            value = input;
         } else if (input === null || _.isNaN(input)) {
             value = null;
         } else if (typeof input === 'string') {
             if (options.zeroFormat && input === options.zeroFormat) {
-                value = 0;
+                // Maybe -0
+                value = Number(input);
+                value = Number.isNaN(value) ? 0 : value;
             } else if (options.nullFormat && input === options.nullFormat || !input.replace(/[^0-9]+/g, '').length) {
                 value = null;
             } else {
@@ -125,7 +128,8 @@
                 output;
 
             // make sure we never format a null value
-            value = value || 0;
+            // Maybe -0
+            value = Number(value);
 
             abs = Math.abs(value);
 
@@ -274,7 +278,9 @@
                 regexp;
 
             if (options.zeroFormat && string === options.zeroFormat) {
-                value = 0;
+                // Maybe -0
+                value = Number(string);
+                value = Number.isNaN(value) ? 0 : value;
             } else if (options.nullFormat && string === options.nullFormat || !string.replace(/[^0-9]+/g, '').length) {
                 value = null;
             } else {
@@ -393,11 +399,14 @@
 
             power = Math.pow(10, boundedPrecision);
 
+            // fullwide the exponential number and keep -0
             var valueE = value.toString().split('e-')[1];
-            var valueString = valueE ? value.toFixed(valueE) : value.toString();
+            var valueString = valueE ? value.toFixed(valueE) : value.toLocaleString('fullwide',{useGrouping:false,maximumFractionDigits:20});
 
             // Multiply up by precision, round accurately, then divide and use native toFixed():
-            output = (roundingFunction(valueString + 'e+' + boundedPrecision) / power).toFixed(boundedPrecision);
+            var outputValue = roundingFunction(valueString + 'e+' + boundedPrecision) / power;
+            output = outputValue.toFixed(boundedPrecision);
+            output = Object.is(outputValue, -0)? '-' + output : output;
 
             if (optionals > maxDecimals - boundedPrecision) {
                 optionalsRegExp = new RegExp('\\.?0{1,' + (optionals - (maxDecimals - boundedPrecision)) + '}$');
