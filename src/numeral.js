@@ -393,7 +393,7 @@
 
             power = Math.pow(10, boundedPrecision);
 
-            var valueE = value.toString().split('e-')[1] || 0;
+            var valueE = value.toString().split('e-')[1];
             var valueString = valueE ? value.toFixed(valueE) : value.toString();
 
             // Multiply up by precision, round accurately, then divide and use native toFixed():
