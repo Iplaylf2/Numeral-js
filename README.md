@@ -58,7 +58,7 @@ See [the english unit tests](https://github.com/adamwdraper/Numeral-js/blob/mast
 
 ### 2.0.8
 
-Bug fix: 格式化需要表示正负符号时，原始数值的正负符号优先级最高。
+Bug fix: 支持-0，格式化时会带有符号。
 
 ### 2.0.7
 
