@@ -61,7 +61,7 @@
             value = input.value();
         } else if (input === 0 || typeof input === 'undefined') {
             // Maybe -0
-            value = Object.is(value , -0) ? -0 : (value || 0);
+            value = input === undefined ? 0 : input;
         } else if (input === null || _.isNaN(input)) {
             value = null;
         } else if (typeof input === 'string') {
