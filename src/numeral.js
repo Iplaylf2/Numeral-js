@@ -399,9 +399,15 @@
 
             power = Math.pow(10, boundedPrecision);
 
-            // fullwide the exponential number and keep -0
-            var valueE = value.toString().split('e-')[1];
-            var valueString = valueE ? value.toFixed(valueE) : value.toLocaleString('fullwide',{useGrouping:false,maximumFractionDigits:20});
+            // maybe -0
+            var valueString;
+            if(numeral.isNegativeZero(value)){
+                valueString = '-0';
+            }else{
+                // process e- number
+                var valueE = value.toString().split('e-')[1];
+                valueString = valueE ? value.toFixed(valueE) : value.toString();
+            }
 
             // Multiply up by precision, round accurately, then divide and use native toFixed():
             var outputValue = roundingFunction(valueString + 'e+' + boundedPrecision) / power;
