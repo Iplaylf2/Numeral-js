@@ -1,6 +1,6 @@
 /*! @preserve
  * numeral.js
- * version : 2.0.8
+ * version : 2.0.9
  * author : Adam Draper
  * license : MIT
  * http://adamwdraper.github.com/Numeral-js/
@@ -21,7 +21,7 @@
 
     var numeral,
         _,
-        VERSION = '2.0.8',
+        VERSION = '2.0.9',
         formats = {},
         locales = {},
         defaults = {
@@ -406,7 +406,7 @@
             // Multiply up by precision, round accurately, then divide and use native toFixed():
             var outputValue = roundingFunction(valueString + 'e+' + boundedPrecision) / power;
             output = outputValue.toFixed(boundedPrecision);
-            output = Object.is(outputValue, -0)? '-' + output : output;
+            output = numeral.isNegativeZero(outputValue)? '-' + output : output;
 
             if (optionals > maxDecimals - boundedPrecision) {
                 optionalsRegExp = new RegExp('\\.?0{1,' + (optionals - (maxDecimals - boundedPrecision)) + '}$');
@@ -573,6 +573,14 @@
         }
 
         return false;
+    };
+
+    numeral.isNegativeZero = function(val) {
+        if(val === 0){
+            return 1 / val === 1 / -0;
+        }else{
+            return false;
+        }
     };
 
 

@@ -56,6 +56,12 @@ See [the english unit tests](https://github.com/adamwdraper/Numeral-js/blob/mast
 
 # Changelog
 
+### 2.0.9
+
+Bug fix: 潜在的兼容问题，Object.is在低版本的浏览器中异常。
+
+Option: 新增numeral.isNegativeZero方法。
+
 ### 2.0.8
 
 Bug fix: 支持-0，格式化时会带有符号。
