@@ -56,6 +56,10 @@ See [the english unit tests](https://github.com/adamwdraper/Numeral-js/blob/mast
 
 # Changelog
 
+### 2.0.10
+
+Bug fix: format "+" "$" 一起使用时不尽人意的问题。
+
 ### 2.0.9
 
 Bug fix: 潜在的兼容问题，Object.is在低版本的浏览器中异常。
